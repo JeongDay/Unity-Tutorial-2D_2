@@ -22,9 +22,13 @@ public class MovingPlatform : MonoBehaviour
         theta += Time.deltaTime * speed;
 
         if (moveType == MoveType.Horizontal)
+        {
             transform.position = new Vector3(initPos.x + power * Mathf.Sin(theta), initPos.y, initPos.z);
+        }
         else if (moveType == MoveType.Vertical)
+        {
             transform.position = new Vector3(initPos.x, initPos.y + power * Mathf.Sin(theta), initPos.z);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D other)
