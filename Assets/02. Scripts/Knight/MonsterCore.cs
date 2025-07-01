@@ -1,5 +1,4 @@
-using System.IO;
-using UnityEditor.UI;
+using System;
 using UnityEngine;
 
 public abstract class MonsterCore : MonoBehaviour
@@ -11,13 +10,21 @@ public abstract class MonsterCore : MonoBehaviour
     protected Rigidbody2D monsterRb;
     protected Collider2D monsterColl;
     
+    public Transform target;
+    
     public float hp;
     public float speed;
+    protected float moveDir;
+    protected float targetDist;
+    
+    protected bool isTrace;
 
     protected virtual void Init(float hp, float speed)
     {
         this.hp = hp;
         this.speed = speed;
+        
+        target = GameObject.FindGameObjectWithTag("Player").transform;
         
         animator = GetComponent<Animator>();
         monsterRb = GetComponent<Rigidbody2D>();
@@ -26,6 +33,16 @@ public abstract class MonsterCore : MonoBehaviour
     
     void Update()
     {
+        targetDist = Vector3.Distance(transform.position, target.position);
+        
+        Vector3 monsterDir = Vector3.right * moveDir;
+        Vector3 playerDir = (transform.position - target.position).normalized;
+
+        float dotValue = Vector3.Dot(monsterDir, playerDir);
+        
+        // isTrace = dotValue < 0f;
+        isTrace = dotValue < -0.9f && dotValue >= -1f;
+        
         switch (monsterState)
         {
             case MonsterState.IDLE:
@@ -40,6 +57,15 @@ public abstract class MonsterCore : MonoBehaviour
             case MonsterState.ATTACK:
                 Attack();
                 break;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Return"))
+        {
+            moveDir *= -1;
+            transform.localScale = new Vector3(moveDir, 1, 1);
         }
     }
 
