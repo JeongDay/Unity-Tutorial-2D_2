@@ -14,15 +14,18 @@ public abstract class MonsterCore : MonoBehaviour
     
     public float hp;
     public float speed;
+    public float attackTime;
+    
     protected float moveDir;
     protected float targetDist;
     
     protected bool isTrace;
 
-    protected virtual void Init(float hp, float speed)
+    protected virtual void Init(float hp, float speed, float attackTime)
     {
         this.hp = hp;
         this.speed = speed;
+        this.attackTime = attackTime;
         
         target = GameObject.FindGameObjectWithTag("Player").transform;
         
@@ -41,7 +44,7 @@ public abstract class MonsterCore : MonoBehaviour
         float dotValue = Vector3.Dot(monsterDir, playerDir);
         
         // isTrace = dotValue < 0f;
-        isTrace = dotValue < -0.9f && dotValue >= -1f;
+        isTrace = dotValue < -0.5f && dotValue >= -1f;
         
         switch (monsterState)
         {

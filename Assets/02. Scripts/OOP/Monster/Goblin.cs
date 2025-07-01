@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Goblin : MonsterCore
@@ -6,15 +7,18 @@ public class Goblin : MonsterCore
     private float idleTime, patrolTime;
 
     private float traceDist = 5f;
+    private float attackDist = 1.5f;
+    
+    private bool isAttack;
     
     void Start()
     {
-        Init(10f, 3f);
+        Init(10f, 3f, 2f);
     }
 
-    protected override void Init(float hp, float speed)
+    protected override void Init(float hp, float speed, float attackTime)
     {
-        base.Init(hp, speed);
+        base.Init(hp, speed, attackTime);
     }
 
     public override void Idle()
@@ -75,10 +79,28 @@ public class Goblin : MonsterCore
 
             ChangeState(MonsterState.IDLE);
         }
+
+        if (targetDist < attackDist)
+        {
+            ChangeState(MonsterState.ATTACK);
+        }
     }
 
     public override void Attack()
     {
-        
+        if (!isAttack)
+            StartCoroutine(AttackRoutine());
+    }
+
+    IEnumerator AttackRoutine()
+    {
+        isAttack = true;
+        animator.SetTrigger("Attack");
+        yield return new WaitForSeconds(1f);
+        animator.SetBool("isRun", false);
+
+        yield return new WaitForSeconds(attackTime - 1f);
+        isAttack = false;
+        ChangeState(MonsterState.IDLE);
     }
 }
