@@ -7,11 +7,13 @@ public abstract class MonsterCore : MonoBehaviour, IDamageable
     public enum MonsterState { IDLE, PATROL, TRACE, ATTACK }
     public MonsterState monsterState = MonsterState.IDLE;
 
+    public ItemManager itemManager;
+
     public Transform target;
     protected Animator animator;
     protected Rigidbody2D monsterRb;
     protected Collider2D monsterColl;
-    [SerializeField] private Image hpBar;
+    public Image hpBar;
     
     public float hp;
     public float currHp;
@@ -24,6 +26,7 @@ public abstract class MonsterCore : MonoBehaviour, IDamageable
     protected float targetDist;
     
     protected bool isTrace;
+    private bool isDead;
 
     protected virtual void Init(float hp, float speed, float attackTime, float atkDamage)
     {
@@ -31,6 +34,8 @@ public abstract class MonsterCore : MonoBehaviour, IDamageable
         this.speed = speed;
         this.attackTime = attackTime;
         this.atkDamage = atkDamage;
+
+        itemManager = FindFirstObjectByType<ItemManager>();
         
         target = GameObject.FindGameObjectWithTag("Player").transform;
         
@@ -44,6 +49,9 @@ public abstract class MonsterCore : MonoBehaviour, IDamageable
     
     void Update()
     {
+        if (isDead)
+            return;
+        
         switch (monsterState)
         {
             case MonsterState.IDLE:
@@ -96,8 +104,11 @@ public abstract class MonsterCore : MonoBehaviour, IDamageable
 
     public void Death()
     {
+        isDead = true;
         animator.SetTrigger("Death");
         monsterColl.enabled = false;
         monsterRb.gravityScale = 0f;
+        
+        itemManager.DropItem(transform.position);
     }
 }

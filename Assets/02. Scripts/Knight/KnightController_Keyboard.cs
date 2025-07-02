@@ -71,6 +71,7 @@ public class KnightController_Keyboard : MonoBehaviour, IDamageable
             if (other.GetComponent<IDamageable>() != null)
             {
                 other.GetComponent<IDamageable>().TakeDamage(atkDamage);
+                other.GetComponent<Animator>().SetTrigger("Hit");
             }
         }
         

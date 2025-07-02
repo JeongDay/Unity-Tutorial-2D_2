@@ -73,6 +73,8 @@ public class Goblin : MonsterCore
             timer = 0f;
             moveDir = Random.Range(0, 2) == 1 ? 1 : -1;
             transform.localScale = new Vector3(moveDir, 1, 1);
+            hpBar.transform.localScale = new Vector3(moveDir, 1, 1);
+            
             patrolTime = Random.Range(1f, 5f);
             animator.SetBool("isRun", true);
             
@@ -102,6 +104,7 @@ public class Goblin : MonsterCore
 
         var scaleX = targetDir.x > 0 ? 1 : -1;
         transform.localScale = new Vector3(scaleX, 1, 1);
+        hpBar.transform.localScale = new Vector3(scaleX, 1, 1);
     }
 
     public override void Attack()
@@ -121,6 +124,7 @@ public class Goblin : MonsterCore
         var targetDir = (target.position - transform.position).normalized;
         var scaleX = targetDir.x > 0 ? 1 : -1;
         transform.localScale = new Vector3(scaleX, 1, 1);
+        hpBar.transform.localScale = new Vector3(scaleX, 1, 1);
         yield return new WaitForSeconds(attackTime - 1f);
         
         isAttack = false;
