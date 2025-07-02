@@ -6,26 +6,27 @@ public abstract class MonsterCore : MonoBehaviour
     public enum MonsterState { IDLE, PATROL, TRACE, ATTACK }
     public MonsterState monsterState = MonsterState.IDLE;
 
+    public Transform target;
     protected Animator animator;
     protected Rigidbody2D monsterRb;
     protected Collider2D monsterColl;
     
-    public Transform target;
-    
     public float hp;
     public float speed;
     public float attackTime;
+    public float atkDamage;
     
     protected float moveDir;
     protected float targetDist;
     
     protected bool isTrace;
 
-    protected virtual void Init(float hp, float speed, float attackTime)
+    protected virtual void Init(float hp, float speed, float attackTime, float atkDamage)
     {
         this.hp = hp;
         this.speed = speed;
         this.attackTime = attackTime;
+        this.atkDamage = atkDamage;
         
         target = GameObject.FindGameObjectWithTag("Player").transform;
         
@@ -36,16 +37,6 @@ public abstract class MonsterCore : MonoBehaviour
     
     void Update()
     {
-        targetDist = Vector3.Distance(transform.position, target.position);
-        
-        Vector3 monsterDir = Vector3.right * moveDir;
-        Vector3 playerDir = (transform.position - target.position).normalized;
-
-        float dotValue = Vector3.Dot(monsterDir, playerDir);
-        
-        // isTrace = dotValue < 0f;
-        isTrace = dotValue < -0.5f && dotValue >= -1f;
-        
         switch (monsterState)
         {
             case MonsterState.IDLE:
@@ -69,6 +60,11 @@ public abstract class MonsterCore : MonoBehaviour
         {
             moveDir *= -1;
             transform.localScale = new Vector3(moveDir, 1, 1);
+        }
+
+        if (other.GetComponent<IDamageable>() != null)
+        {
+            other.GetComponent<IDamageable>().TakeDamage(atkDamage);
         }
     }
 

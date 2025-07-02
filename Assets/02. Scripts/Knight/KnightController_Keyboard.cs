@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class KnightController_Keyboard : MonoBehaviour
+public class KnightController_Keyboard : MonoBehaviour, IDamageable
 {
     private Animator animator;
     private Rigidbody2D knightRb;
@@ -11,8 +11,9 @@ public class KnightController_Keyboard : MonoBehaviour
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float jumpPower = 13f;
 
+    public float hp = 100f;
     private float atkDamage = 3f;
-
+    
     private bool isGround;
     private bool isAttack;
     private bool isCombo;
@@ -89,9 +90,15 @@ public class KnightController_Keyboard : MonoBehaviour
         animator.SetFloat("JoystickY", inputDir.y);
 
         if (inputDir.y < 0)
+        {
             GetComponent<CapsuleCollider2D>().size = new Vector2(0.7f, 0.3f);
+            GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 0.35f);
+        }
         else
+        {
             GetComponent<CapsuleCollider2D>().size = new Vector2(0.7f, 1.7f);
+            GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 0.85f);
+        }
     }
 
     void Move()
@@ -153,5 +160,20 @@ public class KnightController_Keyboard : MonoBehaviour
         isAttack = false;
         isCombo = false;
         animator.SetBool("isCombo", false);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        hp -= damage;
+        if (hp <= 0f)  // hp == 0f
+        {
+            Death();
+        }
+    }
+
+    public void Death()
+    {
+        // 애니메이션 적용
+        Debug.Log("Knight Death");
     }
 }
