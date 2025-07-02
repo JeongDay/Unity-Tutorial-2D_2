@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
-public abstract class MonsterCore : MonoBehaviour
+public abstract class MonsterCore : MonoBehaviour, IDamageable
 {
     public enum MonsterState { IDLE, PATROL, TRACE, ATTACK }
     public MonsterState monsterState = MonsterState.IDLE;
@@ -10,8 +11,11 @@ public abstract class MonsterCore : MonoBehaviour
     protected Animator animator;
     protected Rigidbody2D monsterRb;
     protected Collider2D monsterColl;
+    [SerializeField] private Image hpBar;
     
     public float hp;
+    public float currHp;
+    
     public float speed;
     public float attackTime;
     public float atkDamage;
@@ -33,6 +37,9 @@ public abstract class MonsterCore : MonoBehaviour
         animator = GetComponent<Animator>();
         monsterRb = GetComponent<Rigidbody2D>();
         monsterColl = GetComponent<Collider2D>();
+
+        currHp = hp;
+        hpBar.fillAmount = currHp / hp;
     }
     
     void Update()
@@ -77,5 +84,20 @@ public abstract class MonsterCore : MonoBehaviour
     {
         if (monsterState != newState)
             monsterState = newState;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        currHp -= damage;
+        hpBar.fillAmount = currHp / hp; // 현재체력 / 최대체력
+        if (currHp <= 0f)
+            Death();
+    }
+
+    public void Death()
+    {
+        animator.SetTrigger("Death");
+        monsterColl.enabled = false;
+        monsterRb.gravityScale = 0f;
     }
 }
