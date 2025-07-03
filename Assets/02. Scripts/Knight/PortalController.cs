@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class PortalController : MonoBehaviour
 {
+    public enum SceneType { TOWN, ADVENTURE }
+    public SceneType sceneType = SceneType.TOWN;
+    
     public FadeRoutine fade;
     
     public GameObject portalEffect;
@@ -16,9 +19,7 @@ public class PortalController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
-        {
             StartCoroutine(PortalRoutine());
-        }
     }
     
     IEnumerator PortalRoutine() 
@@ -36,6 +37,9 @@ public class PortalController : MonoBehaviour
             yield return null;
         }
 
-        SceneManager.LoadScene(1);
+        if (sceneType == SceneType.TOWN) 
+            SceneManager.LoadScene(1);
+        else
+            SceneManager.LoadScene(0);
     }
 }
