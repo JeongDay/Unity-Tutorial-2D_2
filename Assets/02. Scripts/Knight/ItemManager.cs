@@ -1,11 +1,31 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemManager : MonoBehaviour
 {
+    public GameObject inventoryUI; // 인벤토리 UI
+    public Button inventoryButton; // 인벤토리 버튼
+    
     [SerializeField] private GameObject[] items;
 
+    [SerializeField] private Transform slotGroup;
     public Slot[] slots;
 
+    void Start()
+    {
+        // 자신과 자식 중에서 Slot Component가 있는 대상을 모두 가져오는 기능
+        slots = slotGroup.GetComponentsInChildren<Slot>(true);
+        
+        // 인벤토리 버튼을 눌렀을 때 OnInventory 함수 실행
+        inventoryButton.onClick.AddListener(OnInventory);
+    }
+
+    public void OnInventory()
+    {
+        // activeSelf : 현재 Active 상태
+        inventoryUI.SetActive(!inventoryUI.activeSelf);
+    }
+    
     public void DropItem(Vector3 dropPos)
     {
         // 랜덤 아이템 설정

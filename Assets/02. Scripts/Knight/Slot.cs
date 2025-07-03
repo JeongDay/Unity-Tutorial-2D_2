@@ -4,13 +4,16 @@ using UnityEngine.UI;
 public class Slot : MonoBehaviour
 {
     private IItemObject item; // 슬롯에 들어올 아이템
-    public Image itemImage; // 먹은 아이템의 이미지가 들어갈 위치
-    public Button slotButton; // 아이템 Use()를 하기 위한 버튼
+    private Image itemImage; // 먹은 아이템의 이미지가 들어갈 위치
+    private Button slotButton; // 아이템 Use()를 하기 위한 버튼
 
     public bool isEmpty = true;
     
     void Awake()
     {
+        slotButton = GetComponent<Button>();
+        itemImage = transform.GetChild(0).GetComponent<Image>();
+        
         slotButton.onClick.AddListener(UseItem);
     }
 
@@ -28,7 +31,6 @@ public class Slot : MonoBehaviour
         // }
 
         
-        // 줄여쓴 코드
         slotButton.interactable = !isEmpty;
         itemImage.gameObject.SetActive(!isEmpty);
     }

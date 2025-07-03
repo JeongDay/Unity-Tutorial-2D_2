@@ -20,7 +20,6 @@ public class HpPotion : MonoBehaviour, IItemObject
     public void Get()
     {
         gameObject.SetActive(false); // 아이템 먹은 것처럼 보여주기 위해 오브젝트 Off
-        
         Inventory.GetItem(this); // 인벤토리에게 아이템 획득을 알리는 기능
     }
 
@@ -33,8 +32,6 @@ public class HpPotion : MonoBehaviour, IItemObject
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Player")) // Tag == Player 인지 확인하는 조건문
-        {
             Get();
-        }
     }
 }
