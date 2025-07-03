@@ -134,6 +134,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcbc85425375f3546b7238f296498d53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemImage: {fileID: 6652421858274569053}
+  slotButton: {fileID: 4371739672660783335}
   isEmpty: 1
 --- !u!1 &3841922491342202083
 GameObject:
