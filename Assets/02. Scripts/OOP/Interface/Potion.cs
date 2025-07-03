@@ -29,4 +29,20 @@ public class Potion : MonoBehaviour, IItem
         
         gameObject.SetActive(false);
     }
+
+    public void Use()
+    {
+        switch (potionType)
+        {
+            case PotionType.Gold:
+                // 체력과 마나 회복
+                break;
+            case PotionType.Hp:
+                // 체력 회복
+                break;
+            case PotionType.Mp:
+                // 마나 회복
+                break;
+        }
+    }
 }

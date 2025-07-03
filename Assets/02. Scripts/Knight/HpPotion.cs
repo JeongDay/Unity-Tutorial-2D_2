@@ -11,27 +11,28 @@ public class HpPotion : MonoBehaviour, IItemObject
     void Start()
     {
         Inventory = FindFirstObjectByType<ItemManager>();
-        
-        Obj = gameObject;
-        ItemName = name;
-        Icon = GetComponent<SpriteRenderer>().sprite;
+
+        Obj = this.gameObject;
+        ItemName = this.gameObject.name;
+        Icon = this.GetComponent<SpriteRenderer>().sprite;
     }
     
     public void Get()
     {
-        gameObject.SetActive(false);
+        gameObject.SetActive(false); // 아이템 먹은 것처럼 보여주기 위해 오브젝트 Off
         
-        Inventory.GetItem(this);
+        Inventory.GetItem(this); // 인벤토리에게 아이템 획득을 알리는 기능
     }
 
     public void Use()
     {
-        Debug.Log("Hp 포션 사용");
+        Debug.Log("아이템 사용");
     }
 
+    // 무엇인가 충돌됐을 때 실행되는 이벤트
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player")) // Tag == Player 인지 확인하는 조건문
         {
             Get();
         }
